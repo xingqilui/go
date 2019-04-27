@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 import "sort"
+import "strings"
 
 const (
 	x = iota
@@ -142,6 +143,164 @@ func main() {
 	man.SayHello()
 
 	fmt.Println(lengthOfLongestSubstring4("abcded1234"))
+
+	//LeetCode 13
+	romannum := romanToInt("IX")
+	fmt.Println(romannum)
+
+	//LeetCode 14
+	var aStr = []string{"abc", "abcd", "abcde"}
+	fmt.Println(longestCommonPrefix2(aStr))
+
+	fmt.Println("----- LeetCode 004 -----")
+	var nums1 = []int{1, 2}
+	var nums2 = []int{}
+	fmt.Println(findMedianSortedArrays(nums1, nums2))
+}
+
+func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
+	var i, j, max1, max2 int
+	var mid float64
+	var len1 = len(nums1)
+	var len2 = len(nums2)
+	var sumlen = len1 + len2
+	var mixlen int
+	var mix = []int{}
+
+	if sumlen == 0 {
+		return 0
+	}
+
+	for {
+
+		if len(mix) == sumlen/2+1 {
+			break
+		}
+
+		if i < len1 {
+			max1 = nums1[i]
+		} else {
+			max1 = 0x7fffffff
+		}
+
+		if j < len2 {
+			max2 = nums2[j]
+		} else {
+			max2 = 0x7fffffff
+		}
+
+		if max1 <= max2 {
+			mix = append(mix, max1)
+			i++
+		} else {
+			mix = append(mix, max2)
+			j++
+		}
+	}
+
+	fmt.Println(mix)
+
+	mixlen = len(mix)
+
+	if mixlen%2 == 1 {
+		mid = (float64(mix[mixlen-1]) + float64(mix[mixlen-2])) / 2
+	} else {
+		mid = float64(mix[mixlen-1])
+	}
+
+	return mid
+}
+
+func longestCommonPrefix2(strs []string) string {
+	var ret, prefix string
+	var exit bool
+	var length int
+
+	var min = func(a int, b int) int {
+		if a < b {
+			return a
+		}
+		return b
+	}
+
+	if len(strs) == 0 {
+		return ""
+	}
+
+	length = len(strs[0])
+
+	for i := 0; i <= length; i++ {
+		prefix = strs[0][0:i]
+
+		for j := 0; j < len(strs); j++ {
+			length = min(length, len(strs[j]))
+
+			if false == strings.HasPrefix(strs[j], prefix) {
+				exit = true
+			}
+		}
+
+		if exit != true {
+			ret = prefix
+		}
+	}
+
+	return ret
+}
+
+func longestCommonPrefix(strs []string) string {
+	var ret string
+	var exit bool
+
+	if len(strs) == 0 {
+		return ""
+	}
+
+	for i := 0; i < len(strs[0]); i++ {
+		c := strs[0][i]
+
+		for j := 0; j < len(strs); j++ {
+			if len(strs[j]) <= i || c != strs[j][i] {
+				exit = true
+				break
+			}
+		}
+
+		if exit == false {
+			ret += string(c)
+		} else {
+			break
+		}
+	}
+
+	return ret
+}
+
+func romanToInt(s string) int {
+	var ret, num, last int
+	var convert = make(map[byte]int)
+
+	convert['I'] = 1
+	convert['V'] = 5
+	convert['X'] = 10
+	convert['L'] = 50
+	convert['C'] = 100
+	convert['D'] = 500
+	convert['M'] = 1000
+
+	for i := 0; i < len(s); i++ {
+		num = convert[s[i]]
+
+		if num > last {
+			ret += num - last - last
+		} else {
+			ret += num
+		}
+
+		last = num
+	}
+
+	return ret
 }
 
 func lengthOfLongestSubstring(s string) int {
