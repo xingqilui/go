@@ -18,9 +18,9 @@ func test() (int, bool, string) {
 func max(num1 int, num2 int) int {
 	if num1 > num2 {
 		return num1
-	} else {
-		return num2
 	}
+
+	return num2
 }
 
 func maxInNum(num []int, size int) int {
@@ -134,7 +134,7 @@ func main() {
 	}
 	fmt.Println()
 
-	var man = Person{"ChenLei", 30}
+	var man = person{"ChenLei", 30}
 	//var pman = &man
 
 	man.SayHello()
@@ -156,6 +156,41 @@ func main() {
 	var nums1 = []int{1, 2}
 	var nums2 = []int{}
 	fmt.Println(findMedianSortedArrays(nums1, nums2))
+
+	fmt.Println("----- LeetCode 020 -----")
+	fmt.Println(isValid("{}[]()"))
+
+}
+
+func isValid(s string) bool {
+	var pair = map[byte]byte{'(': ')', '[': ']', '{': '}'}
+	var stack = make([]byte, len(s))
+	var top, ok int
+	var push = func(c byte) bool {
+		top++
+
+		if top >= len(stack) {
+			return false
+		}
+
+		stack[top] = c
+		return true
+	}
+
+	var pop = func(c byte) bool {
+		if top < 0 {
+			return false
+		}
+
+		stack[top] = 0
+		top--
+
+		return true
+	}
+
+	for i, x := range s {
+
+	}
 }
 
 func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
@@ -401,19 +436,19 @@ func lengthOfLongestSubstring4(s string) int {
 	return max
 }
 
-type Person struct {
+type person struct {
 	name string
 	age  int
 }
 
-func (p *Person) ChangeName(name string) {
+func (p *person) ChangeName(name string) {
 	p.name = name
 }
 
-func (p Person) ChangeAge(age int) {
+func (p person) ChangeAge(age int) {
 	p.age = age
 }
 
-func (p Person) SayHello() {
+func (p person) SayHello() {
 	fmt.Printf("Hello, My name is %s, I am %d years old!\n", p.name, p.age)
 }
